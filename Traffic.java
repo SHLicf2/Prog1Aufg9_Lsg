@@ -92,7 +92,7 @@ class DisplayArea extends JPanel  {
         } else {
             g.fillRect(90,150,(int)(fuel*scaleFactor),10);
         }
-        car.tick(tick_time);
+    
         
     }
 }
