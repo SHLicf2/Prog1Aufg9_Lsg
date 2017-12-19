@@ -39,20 +39,25 @@ public class CarTest  {
         long update_time = 10;
         
     
-        System.out.println("Slowing down from " + car.getSpeed() + 
-                " to " + aim2 + " with " + accel + "m/s : "); 
+        System.out.println("Slowing down from " + car.getSpeed() +
+        		" km/h" + " to " + aim2 + " km/h" + " with " + 
+        		accel + "m/s : "); 
         car_accelerate(car, -accel, aim2, update_time);
         
         car.setSpeed(0);
         
         System.out.println("Accelerating from " + car.getSpeed() +
-                " to " + aim1 + " with " + accel + "m/s : "); 
+        		" km/h" + " to " + aim1 + " km/h" + " with " +
+        		accel + "m/s : "); 
         car_accelerate(car, accel, aim1, update_time);
         
         // wait until we have no fuel
         System.out.println("Waiting until we have no fuel: ");
-        while (car.getFuel() != 0.0f )
-            Traffic.waitAWhile(2000);
+        while (car.getFuel() != 0.0f ) {
+        	System.out.println(car.printState());
+        	Traffic.waitAWhile(2000);
+        }
+            
             
         // refuel and drive 
         car.refuel(60);
