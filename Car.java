@@ -2,13 +2,13 @@ public class Car {
     
    private float x, y, x_init;
    private float speed, fuel;
-   private float time;
+   private double time;
    private boolean motorOn; 
    final float max_speed, max_fuel;
    final float consumtion_factor; 
  
    Car() {
-      this(80, 270, 0.05f); 
+      this(80, 270, 0.5f); 
    }
    
    Car(float max_fuel_t, float max_speed_t, float cf) {
@@ -19,12 +19,13 @@ public class Car {
       x = 0;
       y = 50;
       motorOn = true;
-      setTime(0.0f);
+      setTime(System.nanoTime()/10e8);
       // in RL this would be 0.01
       consumtion_factor = cf;
    }
    
    public float getX()  {
+	  updateState();
       return x; 
    }
     
@@ -83,20 +84,22 @@ public class Car {
     } 
     
     
-    public void tick(float timeleft) {
+   /* public void tick() {
         
-        // ??
-        setTime(getTime() + timeleft);
-        updateState(timeleft);
-    }
+        updateState();
+    }*/
     
     
-    public void updateState(double time_left) {
-        
+    public void updateState() {
+    	// get time left
+    	double timeleft = System.nanoTime()/10e8 - getTime();
+    	// update time 
+    	setTime(getTime() + timeleft);
+    	
         if( getMotorOn() ) {
             
             double consu = consumption( (double)speed );
-            double path = speed * time_left * 1.0 / 3600.0 ;
+            double path = speed * timeleft * 1.0 / 3600.0 ;
             x += path * 1000; // path in meters
             double consumed_fuel = consu/100.0 * path;
         
@@ -117,16 +120,16 @@ public class Car {
     }
     
     public String printState() {
-        return "x Pos: " + x + "," + " y Pos: " + y + "," +
-                " Engine State: " + (motorOn ? "On" : "Off") + "\nSpeed: " + speed + "," + 
-                " Fuel: " + fuel + "\n";
+        return "x Pos: " + getX() + " m" + "," + " y Pos: " + getY() + " m" + 
+        		"," + " Engine State: " + (getMotorOn() ? "On" : "Off") + 
+        		"\nSpeed: " + speed + " km/h" + "," + " Fuel: " + fuel + " l";
     }
 
-    public float getTime() {
+    public double getTime() {
         return time;
     }
 
-    public void setTime(float time) {
+    public void setTime(double time) {
         this.time = time;
     }
     
